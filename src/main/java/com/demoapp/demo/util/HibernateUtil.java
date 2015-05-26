@@ -1,12 +1,5 @@
 package com.demoapp.demo.util;
 
-/**
- * Created with IntelliJ IDEA.
- * User: user
- * Date: 12/11/12
- * Time: 2:44 AM
- * To change this template use File | Settings | File Templates.
- */
 
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;

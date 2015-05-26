@@ -1,33 +1,32 @@
 package com.demoapp.demo.dao;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sdipankar
- * Date: 9/26/12
- * Time: 2:41 PM
- * To change this template use File | Settings | File Templates.
- */
 
+import com.demoapp.demo.model.stock.Stock;
 import com.demoapp.demo.model.user.User;
 import com.demoapp.demo.model.user.UserStatus;
 import com.demoapp.demo.util.HibernateUtil;
 import com.demoapp.demo.util.PasswordEncoder;
+
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.criterion.Restrictions;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 
-@Component
+@Transactional  
+@Repository
 public class UserDAO {
     public User add(User user) throws NoSuchAlgorithmException {
         System.out.println("UserDAO: add");
         System.out.println("UserDAO: START - adding user to the database");
 
-        user.setUserStatus(UserStatus.PENDING);
+        user.setUserStatusCode("A");
         user.setCreatedAt(new Date());
         user.setUpdatedAt(new Date());
 
@@ -44,6 +43,7 @@ public class UserDAO {
     public User update(Long userID, User user) throws NoSuchAlgorithmException {
         System.out.println("UserDAO: update");
         System.out.println("UserDAO: START - updating user to the database");
+       
         Session session = HibernateUtil.getSessionFactory().openSession();
 
         session.beginTransaction();
@@ -62,8 +62,8 @@ public class UserDAO {
         if(user.getPassword() != null && !fetchedUser.getPassword().equals(currentEncodedPassword)) {
             fetchedUser.setPassword(currentEncodedPassword);
         }
-        if(user.getUserStatus() != null && fetchedUser.getUserStatus() != user.getUserStatus()) {
-            fetchedUser.setUserStatus(user.getUserStatus());
+        if(user.getUserStatusCode() != null && fetchedUser.getUserStatusCode() != user.getUserStatusCode()) {
+            fetchedUser.setUserStatusCode(user.getUserStatusCode());
         }
         if(user.getDateOfBirth() != null && fetchedUser.getDateOfBirth() != user.getDateOfBirth()) {
             fetchedUser.setDateOfBirth(user.getDateOfBirth());
@@ -91,7 +91,9 @@ public class UserDAO {
         session.beginTransaction();
         User fetchedUser = (User) session.get(User.class, userID);
         System.out.println("UserDAO: END - fetching user from the database by user ID");
-
+        Stock stock = new Stock();
+        //fetchedUser.addStock(stock);
+        System.out.println("Data"+fetchedUser.getStocks());
         return fetchedUser;
     }
 
@@ -108,7 +110,19 @@ public class UserDAO {
 
         return fetchedUser;
     }
-
+	    public List<User>  testJoinSelect(boolean includeAll) {
+	    	Session session = HibernateUtil.getSessionFactory().openSession();
+	        session.beginTransaction();
+	        SQLQuery  q =session.createSQLQuery("select {e.*}, {c.*} from User e join Stock c "
+            + "on e.id = c.user_id ");
+	        q.addEntity(User.class);
+	        q.addJoin("c", "e.stocks");
+	        List<User> entities = q.list();
+	        for (User entity : entities) {
+	            System.out.println(entity);
+	        }
+	        return entities;
+	    }
     public List<User> fetchAll(boolean includeAll) {
         System.out.println("UserDAO: fetchAll");
         System.out.println("UserDAO: START - fetching all users from the database");
@@ -146,7 +160,7 @@ public class UserDAO {
 
         session.beginTransaction();
         User fetchedUser = fetch(userID);
-        fetchedUser.setUserStatus(UserStatus.DELETED);
+        fetchedUser.setUserStatusCode("D");
         fetchedUser.setUpdatedAt(new Date());
         session.update(fetchedUser);
         session.getTransaction().commit();

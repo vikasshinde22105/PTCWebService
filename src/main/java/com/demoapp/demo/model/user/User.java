@@ -1,196 +1,207 @@
 package com.demoapp.demo.model.user;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sdipankar
- * Date: 9/26/12
- * Time: 2:36 PM
- * To change this template use File | Settings | File Templates.
- */
-
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import org.springframework.data.mongodb.core.mapping.Document;
-
-import javax.validation.constraints.NotNull;
-import javax.ws.rs.DELETE;
-import javax.ws.rs.POST;
-import javax.ws.rs.PUT;
 import java.io.Serializable;
+
+import javax.persistence.*;
+
+import com.demoapp.demo.model.stock.Stock;
+
+import java.sql.Timestamp;
 import java.util.Date;
+import java.util.List;
 
-@Document
-@JsonIgnoreProperties(ignoreUnknown = true)
+
+/**
+ * The persistent class for the user database table.
+ * 
+ */
+@Entity
+@Table(name="user")
+@NamedQuery(name="User.findAll", query="SELECT u FROM User u")
 public class User implements Serializable {
-    private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 1L;
 
-    @NotNull(groups={PUT.class, DELETE.class}, message = "id: Missing Required Field")
-    private Long id;
+	@Id
+	@GeneratedValue(strategy=GenerationType.AUTO)
+	@Column(unique=true, nullable=false)
+	private long id;
 
-    @NotNull(groups=POST.class, message = "name_first: Missing Required Field")
-    @JsonProperty("name_first")
-    private String nameFirst;
+	@Column(name="created_at", nullable=false)
+	private Date createdAt;
 
-    @JsonProperty("name_middle")
-    private String nameMiddle;
+	@Column(name="date_of_birth", nullable=false)
+	private Integer  dateOfBirth;
 
-    @NotNull(groups=POST.class, message = "name_last: Missing Required Field")
-    @JsonProperty("name_last")
-    private String nameLast;
+	@Column(name="month_of_birth", nullable=false)
+	private Integer  monthOfBirth;
 
-    @NotNull(groups=POST.class)
-    private String username;
+	@Column(name="name_first", nullable=false, length=30)
+	private String nameFirst;
 
-    @NotNull(groups=POST.class)
-    private String password;
+	@Column(name="name_last", nullable=false, length=30)
+	private String nameLast;
 
-    @JsonProperty("user_status")
-    private UserStatus userStatus;
+	@Column(name="name_middle", length=10)
+	private String nameMiddle;
 
-    @JsonProperty("user_status_code")
-    private String userStatusCode;
+	@Column(nullable=false, length=64)
+	private String password;
 
-    @NotNull(groups=POST.class, message = "date_of_birth: Missing Required Field")
-    @JsonProperty("date_of_birth")
-    private Integer dateOfBirth;
+	@Column(name="updated_at", nullable=false)
+	private Date updatedAt;
 
-    @NotNull(groups=POST.class, message = "month_of_birth: Missing Required Field")
-    @JsonProperty("month_of_birth")
-    private Integer monthOfBirth;
+	@Column(name="user_status_code", nullable=false, length=1)
+	private String userStatusCode;
 
-    @NotNull(groups=POST.class, message = "year_of_birth: Missing Required Field")
-    @JsonProperty("year_of_birth")
-    private Integer yearOfBirth;
+ 
+	@Column(nullable=false, length=32)
+	private String username;
 
-    @JsonProperty("created_at")
-    private Date createdAt;
+	@Column(name="year_of_birth", nullable=false)
+	private Integer  yearOfBirth;
 
-    @JsonProperty("updated_at")
-    private Date updatedAt;
+	//bi-directional many-to-one association to Stock
+	@OneToMany(mappedBy="user", fetch=FetchType.EAGER)
+	private List<Stock> stocks;
 
-    public User() {}
+	public User() {
+	}
 
-    public Long getId() {
-        return id;
-    }
+	public long getId() {
+		return this.id;
+	}
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+	public void setId(long id) {
+		this.id = id;
+	}
 
-    public String getNameFirst() {
-        return nameFirst;
-    }
+	public Date getCreatedAt() {
+		return this.createdAt;
+	}
 
-    public void setNameFirst(String nameFirst) {
-        this.nameFirst = nameFirst;
-    }
+	public void setCreatedAt(Date createdAt) {
+		this.createdAt = createdAt;
+	}
 
-    public String getNameMiddle() {
-        return nameMiddle;
-    }
+	public Integer  getDateOfBirth() {
+		return this.dateOfBirth;
+	}
 
-    public void setNameMiddle(String nameMiddle) {
-        this.nameMiddle = nameMiddle;
-    }
+	public void setDateOfBirth(Integer  dateOfBirth) {
+		this.dateOfBirth = dateOfBirth;
+	}
 
-    public String getNameLast() {
-        return nameLast;
-    }
+	public Integer  getMonthOfBirth() {
+		return this.monthOfBirth;
+	}
 
-    public void setNameLast(String nameLast) {
-        this.nameLast = nameLast;
-    }
+	public void setMonthOfBirth(Integer  monthOfBirth) {
+		this.monthOfBirth = monthOfBirth;
+	}
 
-    public String getUsername() {
-        return username;
-    }
+	public String getNameFirst() {
+		return this.nameFirst;
+	}
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
+	public void setNameFirst(String nameFirst) {
+		this.nameFirst = nameFirst;
+	}
 
-    public String getPassword() {
-        return password;
-    }
+	public String getNameLast() {
+		return this.nameLast;
+	}
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
+	public void setNameLast(String nameLast) {
+		this.nameLast = nameLast;
+	}
 
-    public UserStatus getUserStatus() {
-        return userStatus;
-    }
+	public String getNameMiddle() {
+		return this.nameMiddle;
+	}
 
-    public void setUserStatus(UserStatus userStatus) {
-        this.userStatus = userStatus;
-        this.userStatusCode = userStatus.getStatusCode();
-    }
+	public void setNameMiddle(String nameMiddle) {
+		this.nameMiddle = nameMiddle;
+	}
 
-    public String getUserStatusCode() {
-        return userStatusCode;
-    }
+	public String getPassword() {
+		return this.password;
+	}
 
-    public void setUserStatusCode(String userStatusCode) {
-        this.userStatusCode = userStatusCode;
-    }
+	public void setPassword(String password) {
+		this.password = password;
+	}
 
-    public Integer getDateOfBirth() {
-        return dateOfBirth;
-    }
+	public Date getUpdatedAt() {
+		return this.updatedAt;
+	}
 
-    public void setDateOfBirth(Integer dateOfBirth) {
-        this.dateOfBirth = dateOfBirth;
-    }
+	public void setUpdatedAt(Date updatedAt) {
+		this.updatedAt = updatedAt;
+	}
 
-    public Integer getMonthOfBirth() {
-        return monthOfBirth;
-    }
+	public String getUserStatusCode() {
+		return this.userStatusCode;
+	}
 
-    public void setMonthOfBirth(Integer monthOfBirth) {
-        this.monthOfBirth = monthOfBirth;
-    }
+	public void setUserStatusCode(String userStatusCode) {
+		this.userStatusCode = userStatusCode;
+	}
 
-    public Integer getYearOfBirth() {
-        return yearOfBirth;
-    }
+	public String getUsername() {
+		return this.username;
+	}
 
-    public void setYearOfBirth(Integer yearOfBirth) {
-        this.yearOfBirth = yearOfBirth;
-    }
+	public void setUsername(String username) {
+		this.username = username;
+	}
 
-    public Date getCreatedAt() {
-        return createdAt;
-    }
+	public Integer  getYearOfBirth() {
+		return this.yearOfBirth;
+	}
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
-    }
+	public void setYearOfBirth(Integer  yearOfBirth) {
+		this.yearOfBirth = yearOfBirth;
+	}
 
-    public Date getUpdatedAt() {
-        return updatedAt;
-    }
+	public List<Stock> getStocks() {
+		return this.stocks;
+	}
 
-    public void setUpdatedAt(Date updatedAt) {
-        this.updatedAt = updatedAt;
-    }
+	public void setStocks(List<Stock> stocks) {
+		this.stocks = stocks;
+	}
 
-    @Override
-    public String toString() {
-        return "User{" +
-                "id=" + id +
-                ", nameFirst='" + nameFirst + '\'' +
-                ", nameMiddle='" + nameMiddle + '\'' +
-                ", nameLast='" + nameLast + '\'' +
-                ", username='" + username + '\'' +
-                ", password='" + password + '\'' +
-                ", userStatus=" + userStatus +
-                ", userStatusCode='" + userStatusCode + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", monthOfBirth=" + monthOfBirth +
-                ", yearOfBirth=" + yearOfBirth +
-                ", createdAt=" + createdAt +
-                ", updatedAt=" + updatedAt +
-                '}';
-    }
+	public Stock addStock(Stock stock) {
+		getStocks().add(stock);
+		stock.setUser(this);
+
+		return stock;
+	}
+
+	public Stock removeStock(Stock stock) {
+		getStocks().remove(stock);
+		stock.setUser(null);
+
+		return stock;
+	}
+	 @Override
+	    public String toString() {
+	        return "User{" +
+	                
+	                ", nameFirst='" + nameFirst + '\'' +
+	                ", nameMiddle='" + nameMiddle + '\'' +
+	                ", nameLast='" + nameLast + '\'' +
+	                ", username='" + username + '\'' +
+	                ", password='" + password + '\'' +
+	                ", userStatus=" + userStatusCode +
+	                ", userStatusCode='" + userStatusCode + '\'' +
+	                ", dateOfBirth=" + dateOfBirth +
+	                ", monthOfBirth=" + monthOfBirth +
+	                ", yearOfBirth=" + yearOfBirth +
+	                ", createdAt=" + createdAt +
+	                ", updatedAt=" + updatedAt +
+	                ",stocks="+ stocks.toString()+
+	                '}';
+	    }
+
 }

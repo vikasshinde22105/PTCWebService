@@ -13,13 +13,6 @@ import org.springframework.stereotype.Component;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sdipankar
- * Date: 3/25/13
- * Time: 3:21 PM
- * To change this template use File | Settings | File Templates.
- */
 @Component
 public class PurchaseRequestDAO {
     @Autowired

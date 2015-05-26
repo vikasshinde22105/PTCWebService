@@ -7,13 +7,6 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.POST;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sdipankar
- * Date: 3/21/13
- * Time: 12:48 PM
- * To change this template use File | Settings | File Templates.
- */
 @Document
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Card {

@@ -14,13 +14,6 @@ import javax.validation.constraints.NotNull;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sdipankar
- * Date: 3/21/13
- * Time: 8:15 AM
- * To change this template use File | Settings | File Templates.
- */
 @Document
 @CompoundIndexes({
 		@CompoundIndex(name = "user_id_idx", def = "{'userId': 1}"),

@@ -11,6 +11,7 @@ package com.demoapp.demo.manager;
 import com.demoapp.demo.dao.UserDAO;
 import com.demoapp.demo.model.error.WebServiceException;
 import com.demoapp.demo.model.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,6 +22,7 @@ import javax.validation.ValidatorFactory;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.POST;
 import javax.ws.rs.PUT;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;

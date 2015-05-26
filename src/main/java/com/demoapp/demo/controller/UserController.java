@@ -1,17 +1,11 @@
 package com.demoapp.demo.controller;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sdipankar
- * Date: 9/24/12
- * Time: 2:45 PM
- * To change this template use File | Settings | File Templates.
- */
 
 import com.demoapp.demo.manager.UserManager;
 import com.demoapp.demo.model.error.WebServiceError;
 import com.demoapp.demo.model.error.WebServiceException;
 import com.demoapp.demo.model.user.User;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -29,7 +23,8 @@ public class UserController {
     @RequestMapping(value = "", method = RequestMethod.POST, consumes = "application/json", produces = "application/json")
     @ResponseBody
     public User addUser(@RequestBody User user) throws Exception {
-        return userManager.add(user);
+       return user;
+    	// return userManager.add(user);
     }
 
     @RequestMapping(value = "/{id}", method = RequestMethod.PUT, consumes = "application/json", produces = "application/json")
@@ -76,10 +71,10 @@ public class UserController {
     }
 
     // Exception handler for generic Exception cases
-    @ExceptionHandler(Exception.class)
+  /*  @ExceptionHandler(Exception.class)
     public ResponseEntity<WebServiceError> handleException(Exception exception) {
         System.out.println("UserController.handleException");
         WebServiceError webServiceError = new WebServiceError(400, exception.getMessage());
         return new ResponseEntity<WebServiceError>(webServiceError, HttpStatus.BAD_REQUEST);
-    }
+    }*/
 }
