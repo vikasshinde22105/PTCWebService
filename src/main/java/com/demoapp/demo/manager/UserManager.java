@@ -1,12 +1,5 @@
 package com.demoapp.demo.manager;
 
-/**
- * Created with IntelliJ IDEA.
- * User: sdipankar
- * Date: 9/26/12
- * Time: 2:40 PM
- * To change this template use File | Settings | File Templates.
- */
 
 import com.demoapp.demo.dao.UserDAO;
 import com.demoapp.demo.model.error.WebServiceException;
